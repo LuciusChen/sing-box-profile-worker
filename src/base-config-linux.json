@@ -1,0 +1,495 @@
+{
+  "log": {
+    "level": "warn",
+    "timestamp": true
+  },
+  "http_clients": [
+    {
+      "tag": "rule-set-via-proxy",
+      "detour": "Proxy"
+    }
+  ],
+  "dns": {
+    "servers": [
+      {
+        "tag": "dns_proxy",
+        "type": "tcp",
+        "server": "8.8.8.8",
+        "detour": "Auto"
+      },
+      {
+        "tag": "dns_direct",
+        "type": "udp",
+        "server": "223.5.5.5"
+      }
+    ],
+    "rules": [
+      {
+        "query_type": [
+          "HTTPS"
+        ],
+        "action": "predefined",
+        "rcode": "NOERROR"
+      },
+      {
+        "domain_suffix": [
+          "tailscale.com",
+          "tailscale.io"
+        ],
+        "action": "route",
+        "server": "dns_direct"
+      },
+      {
+        "rule_set": [
+          "geosite-google",
+          "geosite-youtube"
+        ],
+        "action": "route",
+        "server": "dns_proxy"
+      },
+      {
+        "rule_set": [
+          "geosite-geolocation-!cn"
+        ],
+        "action": "route",
+        "server": "dns_proxy"
+      },
+      {
+        "rule_set": [
+          "geosite-cn",
+          "geosite-private"
+        ],
+        "action": "route",
+        "server": "dns_direct"
+      }
+    ],
+    "final": "dns_proxy",
+    "strategy": "ipv4_only"
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "interface_name": "tun0",
+      "address": [
+        "172.19.0.1/30"
+      ],
+      "auto_route": true,
+      "strict_route": true
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 7890
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "urltest",
+      "tag": "Auto",
+      "outbounds": [
+        "距离下次重置剩余：24 天",
+        "香港 01",
+        "香港 02",
+        "香港 03",
+        "香港 04",
+        "香港 05",
+        "香港 06",
+        "香港 07",
+        "香港 08",
+        "香港 09",
+        "香港 10",
+        "亚太大流量 0.3x",
+        "新加坡 01",
+        "新加坡 02",
+        "新加坡 03",
+        "新加坡 04",
+        "新加坡 05",
+        "新加坡 06",
+        "台湾 01",
+        "台湾 02",
+        "台湾 03",
+        "台湾 04",
+        "日本 01",
+        "日本 02",
+        "日本 03",
+        "日本 04",
+        "日本 05",
+        "日本 06",
+        "美国 01",
+        "美国 02",
+        "美国 03",
+        "美国 04",
+        "美国 05",
+        "美国 06",
+        "美国 07 - 家宽 A",
+        "美国 08 - 家宽 B",
+        "美国 09 - 家宽 C",
+        "美国 10 - 家宽 D",
+        "加拿大 - 家宽",
+        "韩国",
+        "英国",
+        "法国",
+        "德国",
+        "土耳其"
+      ],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "Auto-JP",
+      "outbounds": [
+        "日本 01",
+        "日本 02",
+        "日本 03",
+        "日本 04",
+        "日本 05",
+        "日本 06"
+      ],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "Auto-SG",
+      "outbounds": [
+        "新加坡 01",
+        "新加坡 02",
+        "新加坡 03",
+        "新加坡 04",
+        "新加坡 05",
+        "新加坡 06"
+      ],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "Auto-US",
+      "outbounds": [
+        "美国 01",
+        "美国 02",
+        "美国 03",
+        "美国 04",
+        "美国 05",
+        "美国 06",
+        "美国 07 - 家宽 A",
+        "美国 08 - 家宽 B",
+        "美国 09 - 家宽 C",
+        "美国 10 - 家宽 D"
+      ],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "type": "selector",
+      "tag": "Proxy",
+      "outbounds": [
+        "Auto",
+        "距离下次重置剩余：24 天",
+        "香港 01",
+        "香港 02",
+        "香港 03",
+        "香港 04",
+        "香港 05",
+        "香港 06",
+        "香港 07",
+        "香港 08",
+        "香港 09",
+        "香港 10",
+        "亚太大流量 0.3x",
+        "新加坡 01",
+        "新加坡 02",
+        "新加坡 03",
+        "新加坡 04",
+        "新加坡 05",
+        "新加坡 06",
+        "台湾 01",
+        "台湾 02",
+        "台湾 03",
+        "台湾 04",
+        "日本 01",
+        "日本 02",
+        "日本 03",
+        "日本 04",
+        "日本 05",
+        "日本 06",
+        "美国 01",
+        "美国 02",
+        "美国 03",
+        "美国 04",
+        "美国 05",
+        "美国 06",
+        "美国 07 - 家宽 A",
+        "美国 08 - 家宽 B",
+        "美国 09 - 家宽 C",
+        "美国 10 - 家宽 D",
+        "加拿大 - 家宽",
+        "韩国",
+        "英国",
+        "法国",
+        "德国",
+        "土耳其",
+        "DIRECT"
+      ],
+      "default": "Auto"
+    },
+    {
+      "type": "direct",
+      "tag": "DIRECT"
+    }
+  ],
+  "route": {
+    "default_http_client": "rule-set-via-proxy",
+    "default_domain_resolver": "dns_direct",
+    "rule_set": [
+      {
+        "tag": "geosite-private",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geosite-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geosite-geolocation-!cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geosite-category-ads-all",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geosite-google",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-google.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geosite-youtube",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-youtube.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geosite-telegram",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-telegram.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geosite-openai",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-openai.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geosite-github",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-github.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geosite-bilibili",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-bilibili.srs",
+        "update_interval": "24h"
+      }
+    ],
+    "rules": [
+      {
+        "inbound": [
+          "tun-in",
+          "mixed-in"
+        ],
+        "action": "sniff"
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
+      },
+      {
+        "ip_is_private": true,
+        "action": "route",
+        "outbound": "DIRECT"
+      },
+      {
+        "process_name": [
+          "tailscaled"
+        ],
+        "action": "route",
+        "outbound": "DIRECT"
+      },
+      {
+        "ip_cidr": [
+          "100.64.0.0/10"
+        ],
+        "action": "route",
+        "outbound": "DIRECT"
+      },
+      {
+        "domain_suffix": [
+          "tailscale.com",
+          "tailscale.io"
+        ],
+        "action": "route",
+        "outbound": "DIRECT"
+      },
+      {
+        "rule_set": "geosite-category-ads-all",
+        "action": "reject"
+      },
+      {
+        "process_name": [
+          "qbittorrent",
+          "aria2c",
+          "transmission",
+          "Motrix"
+        ],
+        "action": "route",
+        "outbound": "DIRECT"
+      },
+      {
+        "rule_set": "geosite-private",
+        "action": "route",
+        "outbound": "DIRECT"
+      },
+      {
+        "rule_set": "geosite-bilibili",
+        "action": "route",
+        "outbound": "DIRECT"
+      },
+      {
+        "rule_set": "geosite-youtube",
+        "action": "route",
+        "outbound": "Proxy"
+      },
+      {
+        "domain_suffix": [
+          "notebooklm.google",
+          "notebooklm.google.com",
+          "gemini.google.com",
+          "bard.google.com",
+          "aistudio.google.com",
+          "generativelanguage.googleapis.com",
+          "deepmind.google"
+        ],
+        "action": "route",
+        "outbound": "Auto-SG"
+      },
+      {
+        "rule_set": "geosite-google",
+        "action": "route",
+        "outbound": "Proxy"
+      },
+      {
+        "rule_set": "geosite-telegram",
+        "action": "route",
+        "outbound": "Proxy"
+      },
+      {
+        "domain_suffix": [
+          "openrouter.ai"
+        ],
+        "action": "route",
+        "outbound": "Auto-JP"
+      },
+      {
+        "domain_suffix": [
+          "anthropic.com",
+          "claude.ai",
+          "claude.com",
+          "claudeusercontent.com"
+        ],
+        "action": "route",
+        "outbound": "Auto-US"
+      },
+      {
+        "domain_suffix": [
+          "perplexity.ai",
+          "groq.com",
+          "mistral.ai",
+          "cohere.ai",
+          "huggingface.co"
+        ],
+        "action": "route",
+        "outbound": "Proxy"
+      },
+      {
+        "rule_set": "geosite-openai",
+        "action": "route",
+        "outbound": "Auto-JP"
+      },
+      {
+        "rule_set": "geosite-github",
+        "action": "route",
+        "outbound": "Proxy"
+      },
+      {
+        "rule_set": "geosite-geolocation-!cn",
+        "action": "route",
+        "outbound": "Proxy"
+      },
+      {
+        "rule_set": "geosite-cn",
+        "action": "route",
+        "outbound": "DIRECT"
+      },
+      {
+        "rule_set": "geoip-cn",
+        "action": "route",
+        "outbound": "DIRECT"
+      }
+    ],
+    "final": "Proxy",
+    "auto_detect_interface": true,
+    "find_process": true
+  },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "ui",
+      "external_ui_download_url": "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
+      "external_ui_download_detour": "Proxy",
+      "secret": "",
+      "default_mode": "rule"
+    },
+    "cache_file": {
+      "enabled": true,
+      "path": "/var/lib/sing-box/cache.db",
+      "store_fakeip": true,
+      "store_dns": true
+    }
+  }
+}

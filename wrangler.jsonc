@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sing-box-profile",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  "secrets": {
+    "required": ["UPSTREAM_URL", "ACCESS_TOKEN"]
+  },
+  "observability": {
+    "enabled": true
+  }
+}
